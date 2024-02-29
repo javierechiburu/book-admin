@@ -1,6 +1,6 @@
 // Loading animation
 const shimmer =
-  'before:absolute before:inset-0 before:-translate-x-full before:animate-[shimmer_2s_infinite] before:bg-gradient-to-r before:from-transparent before:via-white/60 before:to-transparent';
+  "before:absolute before:inset-0 before:-translate-x-full before:animate-[shimmer_2s_infinite] before:bg-gradient-to-r before:from-transparent before:via-white/60 before:to-transparent";
 
 export function CardSkeleton() {
   return (
@@ -15,7 +15,6 @@ export function CardSkeleton() {
         <div className="h-7 w-20 rounded-md bg-gray-200" />
       </div>
     </div>
-    
   );
 }
 
@@ -82,7 +81,7 @@ export function LatestInvoicesSkeleton() {
             <div className="mt-2 h-4 w-12 rounded-md bg-gray-200" />
           </div>
         </div>
-        
+
         <div className="flex items-center pb-2 pt-6 bg-gray-200">
           <div className="h-5 w-5 rounded-full bg-gray-200" />
           <div className="ml-2 h-4 w-20 rounded-md bg-gray-200" />
@@ -99,14 +98,16 @@ export default function DashboardSkeleton() {
         className={`${shimmer} relative mb-4 h-8 w-36 overflow-hidden rounded-md bg-gray-100`}
       />
       <div className="grid gap-6 md:grid-cols-8 lg:grid-cols-8">
-        <div className='flex flex-col col-span-4 gap-6'>
+        <div className="flex flex-col col-span-3 gap-6">
           <CardSkeleton />
-          <div className='flex gap-6'>
+          <div className="flex gap-6">
             <CardSkeleton />
             <CardSkeleton />
           </div>
         </div>
-        <LatestInvoicesSkeleton />
+        <div className="flex w-full flex-col md:col-span-5">
+          <LatestInvoicesSkeleton />
+        </div>
       </div>
     </>
   );

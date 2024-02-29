@@ -1,5 +1,5 @@
-import { sql } from '@vercel/postgres';
-import { unstable_noStore as noStore } from 'next/cache';
+import { sql } from "@vercel/postgres";
+import { unstable_noStore as noStore } from "next/cache";
 import {
   CustomerField,
   CustomersTableType,
@@ -8,13 +8,12 @@ import {
   LatestArticleRaw,
   User,
   Revenue,
-} from './definitions';
-import { formatCurrency } from './utils';
+} from "./definitions";
+import { formatCurrency } from "./utils";
 
 export async function fetchLatestArticles() {
   noStore();
   try {
-
     await new Promise((resolve) => setTimeout(resolve, 3000));
     const data = await sql<LatestArticleRaw>`
       SELECT articles.title, articles.status, articles.year, customers.name, customers.email, articles.id
@@ -28,8 +27,8 @@ export async function fetchLatestArticles() {
     }));
     return latestArticles;
   } catch (error) {
-    console.error('Database Error:', error);
-    throw new Error('Failed to fetch the latest invoices.');
+    console.error("Database Error:", error);
+    throw new Error("Failed to fetch the latest invoices.");
   }
 }
 
@@ -51,25 +50,25 @@ export async function fetchCardData() {
       donationsCountPromise,
     ]);
 
-    const numberOfPendingArticles = Number(data[0].rows[0].pending ?? '0');
-    const numberOfPublishedArticles = Number(data[0].rows[0].active ?? '0');
-    const totalDonation = Number(data[1].rows[0].total ?? '0');
+    const numberOfPendingArticles = Number(data[0].rows[0].pending ?? "0");
+    const numberOfPublishedArticles = Number(data[0].rows[0].active ?? "0");
+    const totalDonation = Number(data[1].rows[0].total ?? "0");
 
     return {
       numberOfPendingArticles,
       numberOfPublishedArticles,
-      totalDonation
+      totalDonation,
     };
   } catch (error) {
-    console.error('Database Error:', error);
-    throw new Error('Failed to fetch card data.');
+    console.error("Database Error:", error);
+    throw new Error("Failed to fetch card data.");
   }
 }
 
 const ITEMS_PER_PAGE = 6;
 export async function fetchFilteredArticles(
   query: string,
-  currentPage: number,
+  currentPage: number
 ) {
   noStore();
   const offset = (currentPage - 1) * ITEMS_PER_PAGE;
@@ -98,8 +97,8 @@ export async function fetchFilteredArticles(
 
     return articles.rows;
   } catch (error) {
-    console.error('Database Error:', error);
-    throw new Error('Failed to fetch articles.');
+    console.error("Database Error:", error);
+    throw new Error("Failed to fetch articles.");
   }
 }
 
@@ -120,8 +119,8 @@ export async function fetchArticlesPages(query: string) {
     const totalPages = Math.ceil(Number(count.rows[0].count) / ITEMS_PER_PAGE);
     return totalPages;
   } catch (error) {
-    console.error('Database Error:', error);
-    throw new Error('Failed to fetch total number of articles.');
+    console.error("Database Error:", error);
+    throw new Error("Failed to fetch total number of articles.");
   }
 }
 
@@ -146,8 +145,8 @@ export async function fetchArticleById(id: string) {
 
     return article[0];
   } catch (error) {
-    console.error('Database Error:', error);
-    throw new Error('Failed to fetch article.');
+    console.error("Database Error:", error);
+    throw new Error("Failed to fetch article.");
   }
 }
 
@@ -165,8 +164,8 @@ export async function fetchCustomers() {
     const customers = data.rows;
     return customers;
   } catch (err) {
-    console.error('Database Error:', err);
-    throw new Error('Failed to fetch all customers.');
+    console.error("Database Error:", err);
+    throw new Error("Failed to fetch all customers.");
   }
 }
 
@@ -199,8 +198,8 @@ export async function fetchFilteredCustomers(query: string) {
 
     return customers;
   } catch (err) {
-    console.error('Database Error:', err);
-    throw new Error('Failed to fetch customer table.');
+    console.error("Database Error:", err);
+    throw new Error("Failed to fetch customer table.");
   }
 }
 
@@ -210,53 +209,33 @@ export async function getUser(email: string) {
     const user = await sql`SELECT * FROM users WHERE email=${email}`;
     return user.rows[0] as User;
   } catch (error) {
-    console.error('Failed to fetch user:', error);
-    throw new Error('Failed to fetch user.');
+    console.error("Failed to fetch user:", error);
+    throw new Error("Failed to fetch user.");
   }
 }
 
 export async function getAuthenticationPaypal() {
   try {
-    const response = await fetch('https://api-m.sandbox.paypal.com/v1/oauth2/token', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Basic ${btoa(`${process.env.PAYPAL_CLIENT_ID}:${process.env.PAYPAL_CLIENT_SECRET}`)}`,
-        'Content-Type': 'application/x-www-form-urlencoded'
-      },
-      body: 'grant_type=client_credentials'
-    });
-  
+    const response = await fetch(
+      "https://api-m.sandbox.paypal.com/v1/oauth2/token",
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Basic ${btoa(
+            `${process.env.PAYPAL_CLIENT_ID}:${process.env.PAYPAL_CLIENT_SECRET}`
+          )}`,
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: "grant_type=client_credentials",
+      }
+    );
+
     if (!response.ok) {
-      throw new Error('Error en la solicitud');
+      throw new Error("Error en la solicitud");
     }
     const data = await response.json();
     return data;
   } catch (error) {
-    console.error('Error:', error);
-  }
-}
-
-export async function getBalance() {
-
-  try {
-
-    const myHeaders = new Headers();
-
-    const requestOptions = {
-      method: "GET",
-      headers: myHeaders,
-      redirect: "follow"
-    };
-
-    fetch("https://api-m.sandbox.paypal.com/v1/reporting/balances?as_of_time=2022-03-20T00:00:00.000Z&currency_code=ALL&include_crypto_currencies=true", {
-      method: "GET",
-      headers: new Headers(),
-      redirect: "follow"
-    })
-      .then((response) => response.text())
-      .then((result) => console.log(result))
-      .catch((error) => console.error(error));
-  } catch (error) {
-    console.error('Error:', error);
+    console.error("Error:", error);
   }
 }
