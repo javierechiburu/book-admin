@@ -25,8 +25,7 @@ const FormDonationSchema = z.object({
   flowOrder: z.string()
 });
  
-const CreateDonation = FormDonationSchema.omit({ id: true, date: true });
- 
+const UpdateDonation = FormDonationSchema.omit({ id: true, date: true });
 const CreateArticle = FormSchema.omit({ id: true, date: true });
 const UpdateArticle = FormSchema.omit({ id: true, date: true });
  
@@ -51,8 +50,7 @@ export async function createArticles(formData: FormData) {
 
 export async function updateDonation(key : String) {
   try {
-
-        const { flowOrder } = CreateDonation.parse({
+      const { flowOrder } = UpdateDonation.parse({
           flowOrder: key
       });
       await sql`UPDATE donations SET status = 12 WHERE flowOrder = ${flowOrder}`;
