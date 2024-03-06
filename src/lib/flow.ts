@@ -32,17 +32,3 @@ export async function getPack(params: Object) {
 
   return toSign;
 }
-
-export async function updateDonation(key : String) {
-  try {
-
-        const { flowOrder } = CreateDonation.parse({
-          flowOrder: key
-      });
-      await sql`UPDATE donations SET status = 12 WHERE flowOrder = ${flowOrder}`;
-      return true;
-    } catch (error) {
-      console.error('Database Error:', error);
-      throw new Error('Failed to fetch donations.');
-    }
-}
