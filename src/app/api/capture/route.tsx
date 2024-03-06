@@ -8,6 +8,8 @@ export async function POST(req: NextRequest, res: NextResponse) {
         const dataReq = await req.formData()
         const token = dataReq.get('token')
 
+        console.log(token)
+
         const params = {
             "apiKey": apiKey,
             "token": token
@@ -22,7 +24,8 @@ export async function POST(req: NextRequest, res: NextResponse) {
         const responseData = await response.json();
         updateDonation(responseData.flowOrder)
 
-
+        console.log("acaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+        return NextResponse.json({status: 200})
     } catch (error) {
         console.error("Error fetching balance:", error);
         throw new Error("Failed to fetch balance data.");
