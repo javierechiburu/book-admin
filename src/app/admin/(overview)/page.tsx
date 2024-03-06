@@ -1,10 +1,8 @@
 import { Card, CardBalanced } from "@/components/Cards";
 import LatestArticles from "@/components/LatestArticles";
 import { fetchLatestArticles, fetchCardData } from "@/lib/data";
-import { getBalance } from "@/lib/paypal";
 
 export default async function Page() {
-  const { totalBalance, currency } = await getBalance();
   const latestArticles = await fetchLatestArticles();
   const { numberOfPublishedArticles, numberOfPendingArticles } =
     await fetchCardData();
@@ -15,8 +13,8 @@ export default async function Page() {
       </h1>
       <div className="grid gap-6 md:grid-cols-4 lg:grid-cols-8">
         <div className="flex flex-col col-span-3 gap-6">
-          {<CardBalanced title="Avaliable Balance" value={totalBalance} />}
-          <div className="flex gap-6 justify-between">
+          {<CardBalanced title="Avaliable Balance" value={1} />}
+          <div className="flex  flex-col gap-6 justify-between">
             {
               <Card
                 title="Pending Articles"

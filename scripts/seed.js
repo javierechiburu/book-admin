@@ -1,8 +1,4 @@
 const { db } = require('@vercel/postgres');
-const {
-  articles,
-  customers
-} = require('../src/lib/placeholder-data.js');
 const bcrypt = require('bcrypt');
 
 
@@ -16,6 +12,8 @@ async function seedDonations(client) {
     id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
     email VARCHAR(255),
     mount DECIMAL NOT NULL,
+    status INT NOT NULL,
+    flowOrder VARCHAR(255) NOT NULL UNIQUE,
     date DATE NOT NULL
   );`;
 
@@ -46,23 +44,8 @@ async function seedArticles(client) {
     date DATE NOT NULL
   );`;
 
-    console.log(`Created "articles" table`);
-
-    const insertedArticles = await Promise.all(
-      articles.map(
-        (article) => client.sql`
-        INSERT INTO articles (customer_id, title, content, status, year, date)
-        VALUES (${article.customer_id}, ${article.title}, ${article.content}, ${article.status}, ${article.year}, ${article.date})
-        ON CONFLICT (id) DO NOTHING;
-      `,
-      ),
-    );
-
-    console.log(`Seeded ${insertedArticles.length} articles`);
-
     return {
-      createTable,
-      insertedArticles
+      createTable
     };
   } catch (error) {
     console.error('Error seeding articles:', error);
@@ -87,22 +70,8 @@ async function seedCustomers(client) {
 
     console.log(`Created "customers" table`);
 
-    // Insert data into the "customers" table
-    const insertedCustomers = await Promise.all(
-      customers.map(
-        (customer) => client.sql`
-        INSERT INTO customers (id, name, email, image_url)
-        VALUES (${customer.id}, ${customer.name}, ${customer.email}, ${customer.image_url})
-        ON CONFLICT (id) DO NOTHING;
-      `,
-      ),
-    );
-
-    console.log(`Seeded ${insertedCustomers.length} customers`);
-
     return {
       createTable,
-      customers: insertedCustomers,
     };
   } catch (error) {
     console.error('Error seeding customers:', error);
