@@ -21,9 +21,15 @@ export async function POST(
     const serviceName = "payment/getStatus";
     const flowApi = new FlowApi();
     const response = await flowApi.send(serviceName, {token}, "GET");
-    const u = await updateDonation("2085737")
+    if(response){
+        const u = await updateDonation(response.flowOrder)
+        return Response.json({ status:200, update: u, response: response.flowOrder }) 
+    }else{
+        return Response.json({ status:400, update: false, response: response.flowOrder }) 
+    }
+    
 
-    return Response.json({ status:200, update: u }) 
+    
   } catch (error : any) {
     console.error("Error fetching balance:", error);
       throw new Error("Failed to fetch balance data.");
