@@ -6,7 +6,7 @@ import { updateDonation } from '@/lib/actions';
 export async function POST(req: NextApiRequest, res: NextApiResponse) {
   try {
     if (!req.body.token) {
-      throw new Error("No se recibió el token");
+        return new Response("error",{ status:400 } ) 
     }
     const token: string = req.body.token;
     const params = {
