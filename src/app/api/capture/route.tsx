@@ -3,19 +3,7 @@
 import { updateDonation } from '@/lib/actions';
 import FlowApi from '@/lib/flow-api';
 import type { NextRequest, NextResponse } from 'next/server'
-import { z } from 'zod'
- 
-const schema = z.object({
-  token: z.string()
-})
 
-export const config = {
-    api: {
-      bodyParser: false,
-    },
-};
-  
- 
 
 export async function POST(
     req: NextRequest,

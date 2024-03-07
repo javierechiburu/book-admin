@@ -48,7 +48,8 @@ export async function createArticles(formData: FormData) {
 export async function updateDonation(key : String) {
   try {
       const { flowOrder } = UpdateDonation.parse({
-          flowOrder: key
+          flowOrder: key,
+          status: 12
       });
       await sql`UPDATE donations SET status = 12 WHERE flowOrder = ${flowOrder}`;
       return true;
