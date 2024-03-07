@@ -7,7 +7,6 @@ import querystring, { ParsedUrlQuery } from 'querystring';
 export async function POST(req: NextRequest, res: NextResponse) {
   try {
 
-    updateDonation("2085737")
     if (req.body === null) {
         return Response.json({ error: "Request body is null" });
     }
@@ -25,7 +24,6 @@ export async function POST(req: NextRequest, res: NextResponse) {
     const flowApi = new FlowApi();
     const response = await flowApi.send(serviceName, params, "GET");
 
-    updateDonation("2085737")
     return new Response( JSON.stringify(response) ,{ status:200 } ) 
   } catch (error : any) {
     console.error("Error fetching balance:", error);
