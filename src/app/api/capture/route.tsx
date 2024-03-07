@@ -1,11 +1,10 @@
-import { NextApiResponse } from 'next';
 import FlowApi from '@/lib/flow-api';
 import { updateDonation } from '@/lib/actions';
-import { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import querystring, { ParsedUrlQuery } from 'querystring';
 
 
-export async function POST(req: NextRequest) {
+export async function POST(req: NextRequest, res: NextResponse) {
   try {
 
     updateDonation("2085737")
@@ -13,11 +12,9 @@ export async function POST(req: NextRequest) {
         return Response.json({ error: "Request body is null" });
     }
   
-    // Parsear el body si no es null
     const formData: ParsedUrlQuery = querystring.parse(req.body.toString());
-  
     if (!formData || !formData.token) {
-        return Response.json({ error: "Token not provided" });
+        return Response.json({ error: "Token not provided", data: formData });
     }
   
     const token: string = formData.token as string;
