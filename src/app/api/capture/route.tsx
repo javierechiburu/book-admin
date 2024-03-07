@@ -22,10 +22,11 @@ export async function POST(
     const flowApi = new FlowApi();
     const response = await flowApi.send(serviceName, {token}, "GET");
     if(response){
-        const u = await updateDonation(response.flowOrder)
+        const flow = response.flowOrder.toString();
+        const u = await updateDonation(flow)
         return Response.json({ status:200, update: u, response: response.flowOrder }) 
     }else{
-        return Response.json({ status:400, update: false, response: response.flowOrder }) 
+        return Response.json({ status:200, update: false, response: response.flowOrder }) 
     }
     
 
