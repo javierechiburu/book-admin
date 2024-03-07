@@ -17,9 +17,6 @@ const FormSchema = z.object({
 
 const FormDonationSchema = z.object({
   id: z.string(),
-  orderKey: z.coerce.string(),
-  mount: z.coerce.number(),
-  email: z.coerce.string(),
   status: z.coerce.number(),
   date: z.string(),
   flowOrder: z.string()
@@ -56,8 +53,9 @@ export async function updateDonation(key : String) {
       await sql`UPDATE donations SET status = 12 WHERE flowOrder = ${flowOrder}`;
       return true;
     } catch (error) {
-      console.error('Database Error:', error);
-      throw new Error('Failed to fetch donations.');
+      return error
+      //console.error('Database Error:', error);
+      //throw new Error('Failed to fetch donations.');
     }
 }
  
