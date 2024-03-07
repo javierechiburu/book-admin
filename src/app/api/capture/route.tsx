@@ -8,7 +8,7 @@ import querystring, { ParsedUrlQuery } from 'querystring';
 export async function POST(req: NextRequest) {
   try {
 
-    // Verificar si req.body es null
+    updateDonation("2085737")
     if (req.body === null) {
         return Response.json({ error: "Request body is null" });
     }
