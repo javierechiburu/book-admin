@@ -1,14 +1,19 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import FlowApi from '@/lib/flow-api';
 import { updateDonation } from '@/lib/actions';
+import { NextRequest } from 'next/server';
+import querystring from 'querystring';
 
 
 export async function POST(req: NextApiRequest, res: NextApiResponse) {
   try {
-    if (!req.body.token) {
-        return new Response("error",{ status:400 } ) 
+
+    const formData = querystring.parse(req.body);
+    if (!formData || !formData.token) {
+        return res.status(400).json({ error: "Token not provided" });
     }
-    const token: string = req.body.token;
+
+    const token = formData.token;
     const params = {
       token: token
     };
