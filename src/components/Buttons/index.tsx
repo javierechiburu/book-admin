@@ -44,3 +44,15 @@ export function UpdateArticle({ id }: { id: string }) {
     </Link>
   );
 }
+
+export function CreateCustomer() {
+  return (
+    <Link
+      href={"/admin/customers/create"}
+      className="flex h-10 items-center rounded-lg border border-gray-800 px-4 text-sm font-medium text-gray-800 transition-colors hover:bg-yellow-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-600"
+    >
+      <span className="hidden md:block">Create Customer</span>{' '}
+      <PlusIcon className="h-5 md:ml-4 text-gray-800" />
+    </Link>
+  );
+}

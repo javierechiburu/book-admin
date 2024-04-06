@@ -1,4 +1,4 @@
-import Form from '@/components/Forms/CreateArticleForm';
+import Form from '@/components/Forms/CreateCustomerForm';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import { fetchCustomers } from '@/lib/data';
  
@@ -9,15 +9,15 @@ export default async function Page() {
     <main>
       <Breadcrumbs
         breadcrumbs={[
-          { label: 'Articles', href: '/admin/articles' },
+          { label: 'Customers', href: '/admin/customers' },
           {
-            label: 'Create Article',
-            href: '/admin/articles/create',
+            label: 'Create Customers',
+            href: '/admin/customers/create',
             active: true,
           },
         ]}
       />
-      <Form customers={customers} />
+      <Form/>
     </main>
   );
 }

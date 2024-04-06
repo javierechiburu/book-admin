@@ -1,18 +1,18 @@
 import { ArrowPathIcon } from "@heroicons/react/24/outline";
 import clsx from "clsx";
-import { LatestArticle } from "@/lib/definitions";
-export default async function LatestArticles({
-  latestArticles,
-}: {
-  latestArticles: LatestArticle[];
-}) {
+import Image from "next/image";
+import { fetchLatestArticles } from "@/lib/data";
+
+export default async function LatestArticles() {
+
+  const latestArticles = await fetchLatestArticles();
   return (
     <div className="flex grow flex-col justify-between rounded-xl bg-white p-4">
       {/* NOTE: comment in this code when you get to this point in the course */}
 
       {
-        <div className="px-6 rounded-xl">
-          {latestArticles.map((article, i) => {
+        <div className="px-6 rounded-xl h-full">
+          {latestArticles.length > 0 ? latestArticles.map((article, i) => {
             return (
               <div
                 key={article.id}
@@ -47,7 +47,10 @@ export default async function LatestArticles({
                 </p>
               </div>
             );
-          })}
+          }): <div className="flex justify-center items-center flex-col h-full">
+              <Image src={'/cat_no_files.png'} alt="" width={200} height={200} />
+              <span className="text-gray-800 text-[.7rem] mt-2 uppercase ">No se han creado artículos</span>
+            </div>}
         </div>
       }
       <div className="flex justify-between items-center">

@@ -15,6 +15,12 @@ const FormSchema = z.object({
   date: z.string(),
 });
 
+const FormCustomerSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  email: z.string(),
+});
+
 const FormDonationSchema = z.object({
   id: z.string(),
   status: z.coerce.number(),
@@ -25,6 +31,8 @@ const FormDonationSchema = z.object({
 const UpdateDonation = FormDonationSchema.omit({ id: true, date: true });
 const CreateArticle = FormSchema.omit({ id: true, date: true });
 const UpdateArticle = FormSchema.omit({ id: true, date: true });
+const CreateCustomer = FormCustomerSchema.omit({ id: true, date: true });
+
  
 export async function createArticles(formData: FormData) {
   const { customerId, title, content, year, status } = CreateArticle.parse({
@@ -82,4 +90,19 @@ export async function updateArticle(id: string, formData: FormData) {
 export async function deleteArticle(id: string) {
   await sql`DELETE FROM articles WHERE id = ${id}`;
   revalidatePath('/admin/articles');
+}
+
+export async function createCustomers(formData: FormData) {
+  const { name, email } = CreateCustomer.parse({
+    name: formData.get('name'),
+    email: formData.get('email')
+  });
+
+  await sql`
+      INSERT INTO customers (name, email, image_url)
+      VALUES (${name}, ${email}, 'test.jpg')
+  `;
+
+  revalidatePath('/admin/customers');
+  redirect('/admin/customers');
 }

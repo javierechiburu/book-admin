@@ -1,6 +1,6 @@
 import Pagination from '@/components/Pagination';
 import Search from '@/components/Search';
-import Table from '@/components/Table';
+import Table from '@/components/Table/invoicesTable';
 import { CreateArticle } from '@/components/Buttons';
 import { InvoicesTableSkeleton } from '@/ui/skeletons';
 import { Suspense } from 'react';

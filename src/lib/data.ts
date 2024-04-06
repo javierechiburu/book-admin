@@ -43,7 +43,7 @@ export async function fetchCardData() {
 
     const donationsCountPromise = sql`SELECT 
       SUM(mount) AS "total"
-      FROM donations`;
+      FROM donations WHERE status = 12`;
 
     const data = await Promise.all([
       articleCountPromise,
@@ -57,6 +57,24 @@ export async function fetchCardData() {
     return {
       numberOfPendingArticles,
       numberOfPublishedArticles,
+      totalDonation,
+    };
+  } catch (error) {
+    console.error("Database Error:", error);
+    throw new Error("Failed to fetch card data.");
+  }
+}
+
+export async function fetchBalanceData() {
+  noStore();
+  try {
+    const data = await sql`SELECT 
+      SUM(mount) AS "total"
+      FROM donations WHERE status = 12`;
+
+    const totalDonation = Number(data.rows[0].total ?? "0");
+
+    return {
       totalDonation,
     };
   } catch (error) {
@@ -178,22 +196,22 @@ export async function fetchFilteredCustomers(query: string) {
 		  customers.name,
 		  customers.email,
 		  customers.image_url,
-		  COUNT(invoices.id) AS total_invoices,
-		  SUM(CASE WHEN invoices.status = 'pending' THEN invoices.amount ELSE 0 END) AS total_pending,
-		  SUM(CASE WHEN invoices.status = 'paid' THEN invoices.amount ELSE 0 END) AS total_paid
+		  COUNT(articles.id) AS total_articles,
+		  SUM(CASE WHEN articles.status = 'pending' THEN 1 ELSE 0 END) AS total_pending,
+		  SUM(CASE WHEN articles.status = 'paid' THEN 1 ELSE 0 END) AS total_paid
 		FROM customers
-		LEFT JOIN invoices ON customers.id = invoices.customer_id
+		  LEFT JOIN articles ON customers.id = articles.customer_id
 		WHERE
 		  customers.name ILIKE ${`%${query}%`} OR
-        customers.email ILIKE ${`%${query}%`}
+      customers.email ILIKE ${`%${query}%`}
 		GROUP BY customers.id, customers.name, customers.email, customers.image_url
 		ORDER BY customers.name ASC
 	  `;
 
+   
+
     const customers = data.rows.map((customer) => ({
       ...customer,
-      total_pending: formatCurrency(customer.total_pending),
-      total_paid: formatCurrency(customer.total_paid),
     }));
 
     return customers;
@@ -211,31 +229,5 @@ export async function getUser(email: string) {
   } catch (error) {
     console.error("Failed to fetch user:", error);
     throw new Error("Failed to fetch user.");
-  }
-}
-
-export async function getAuthenticationPaypal() {
-  try {
-    const response = await fetch(
-      "https://api-m.sandbox.paypal.com/v1/oauth2/token",
-      {
-        method: "POST",
-        headers: {
-          Authorization: `Basic ${btoa(
-            `${process.env.PAYPAL_CLIENT_ID}:${process.env.PAYPAL_CLIENT_SECRET}`
-          )}`,
-          "Content-Type": "application/x-www-form-urlencoded",
-        },
-        body: "grant_type=client_credentials",
-      }
-    );
-
-    if (!response.ok) {
-      throw new Error("Error en la solicitud");
-    }
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error("Error:", error);
   }
 }

@@ -100,7 +100,7 @@ export default function DashboardSkeleton() {
       <div className="grid gap-6 md:grid-cols-8 lg:grid-cols-8">
         <div className="flex flex-col col-span-3 gap-6">
           <CardSkeleton />
-          <div className="flex gap-6">
+          <div className="flex flex-col gap-6">
             <CardSkeleton />
             <CardSkeleton />
           </div>
